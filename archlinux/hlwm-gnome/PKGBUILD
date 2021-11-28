@@ -1,0 +1,39 @@
+# Maintainer: Kamil Podbielski <hlwm-gnome@gmail.com>
+
+pkgname=hlwm-gnome-git
+_pkgbase=hlwm-gnome
+pkgver=40.1
+pkgrel=1
+epoch=1
+pkgdesc="Use HerbstluftWM with GNOME Session integration."
+arch=('any')
+url="https://github.com/piedev/hlwm-gnome/"
+license=('MIT')
+depends=(
+	'herbstluftwm'
+	'gnome-session'
+	'gnome-settings-daemon'
+)
+optdepends=(
+	'gdm'
+	'gnome-flashback'
+)
+source=(git+https://github.com/piedev/hlwm-gnome.git)
+
+pkgver() {
+  cd "$_pkgbase"
+  git describe --tags --long|sed -r "s,^[^0-9],,;s,([0-9]*-g),r\1,;s,[-_],.,g"
+}
+
+build() {
+  cd "$_pkgbase"
+
+  make
+}
+
+package() {
+  cd "$_pkgbase"
+
+  make DESTDIR="$pkgdir" install
+}
+
